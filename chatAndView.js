@@ -1,7 +1,7 @@
 ﻿//获取房间id
 var templateId = $("body").attr("id"),
 	templateClass = $("body").attr("class");
-var roomId = GetQueryString('roomId');
+var roomId = page.roomId;
 var isAdEnd = false;
 
 var nameSpaceData = {
@@ -30,10 +30,13 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 				isCountDown: false
 			}
 			if(data.live_start_time === 0){
+				console.log(1);
 				$("#time-watch-wrapper").prepend("<span style='font-size:.2rem;position:absolute;top:.15rem;left:.15rem;'>直播即将开始</span>");			
 			}else{
-				$("#time-watch-wrapper").removeClass("line-height_3");
-				countDownDom = initDom("countTime", filler);
+				//$("#time-watch-wrapper").removeClass("line-height_3");
+				//countDownDom = initDom("countTime", filler);
+				console.log(2);
+				page.trigger('drawCountDown',filler);
 			}
 			 
 		} else {
@@ -43,10 +46,13 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 				isCountDown: true
 			}
 			if(data.plan_start_time === 0){
+				console.log(3);
 				$("#time-watch-wrapper").prepend("<span style='font-size:.2rem;position:absolute;top:.15rem;left:.15rem;'>直播即将开始</span>");;
 			}else{
-				$("#time-watch-wrapper").removeClass("line-height_3");
-				countDownDom = initDom("countTime", filler);
+				console.log(4);
+				//$("#time-watch-wrapper").removeClass("line-height_3");
+				//countDownDom = initDom("countTime", filler);
+				page.trigger('drawCountDown',filler);
 			}
 		}
 		window.videoStatus = data.room_status;
@@ -74,7 +80,7 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 				data:data.channel_info,
 				roomId:roomId
 			}
-			initDom("multiCamera",filler);
+			//initDom("multiCamera",filler);
 		}
 		visitor(data.click_poll_time, data.pv_poll_time);
 		//循环查询直播状态
@@ -99,16 +105,16 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 		}, function (tokendata) {
 			var tokenData = JSON.parse(tokendata);
 			if(tokenData.params.code === 99999){
-				var closeDialog = new Dialog('注册用户数超限');
-				closeDialog.init();
+				//var closeDialog = new Dialog('注册用户数超限');
+				//closeDialog.init();
 			}
 			var token = tokenData.params.token;
 			initRongYun(data.appkey, token, userName, userPic);
 		})
 	} else if (data.code === 10029) {
 		if(roomId){
-			var closeDialog = new Dialog('该房间已经被删除');
-			closeDialog.init();
+//			var closeDialog = new Dialog('该房间已经被删除');
+			//closeDialog.init();
 		}
 	} else {
 		console.log("错误");
@@ -187,7 +193,7 @@ function initRongYun(appkey, token, userName, userPic) {
 				// 发送的消息内容将会被打印
 				console.log('dddddd');
 				console.log(message.content.content);
-				chatBoxShowMessage(message);
+				//chatBoxShowMessage(message);
 				break;
 			case RongIMClient.MessageType.VoiceMessage:
 				// 对声音进行预加载
@@ -378,7 +384,7 @@ function sendMessage(msg) {
 		onSuccess: function (message) {
 			//message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
 			console.log(message);
-			chatBoxShowMessage(message);
+			//chatBoxShowMessage(message);
 		},
 		onError: function (errorCode, message) {
 			var info = '';
@@ -409,7 +415,7 @@ function sendMessage(msg) {
 		}
 	});
 }
-function chatBoxShowMessage(message) {
+/* function chatBoxShowMessage(message) {
 	var name = message.content.extra,
 	content = RongIMLib.RongIMEmoji.emojiToHTML(message.content.content[0]),
 	userpic = is_weixin() ? message.content.content[1] : "/public/images/default.png";
@@ -417,7 +423,7 @@ function chatBoxShowMessage(message) {
 	$(".chat-content").append("<p class='message-wrapper'><span><img src=" + userpic + ">&nbsp;&nbsp;<span class='user-name'>" + name + "</span>&nbsp;:&nbsp;" + content + "</span></p>");
 	templateClass === "interaction" && ($("#wrapper").scrollTop($("#wrapper")[0].scrollHeight));
 	templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth));
-}
+} */
 //获取链接中参数的方法
 function GetQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -477,7 +483,8 @@ function visitor_watchNum(isFirst) {
 			var filler = {
 				num: visitNum
 			};
-			var watchDom = initDom("watch", filler);
+			//var watchDom = initDom("watch", filler);
+			page.trigger("drawWatcher",filler);
 			if (isFirst) {
 				if (templateId === "root") {
 					$(".room-user>span:eq(1)").html(visitNum);
@@ -489,12 +496,7 @@ function visitor_watchNum(isFirst) {
 					visitor_watchNum(false)
 				}, 1000 * data.params.pv_poll_time);
 			}
-
-			if (templateId === "root") {
-				$(".room-user>span:eq(1)").html(visitNum);
-			} else {
-				watchDom && watchDom.refreshData(visitNum,data.params.pv_poll_time);
-			}
+			//watchDom && watchDom.refreshData(visitNum,data.params.pv_poll_time);
 		}
 	});
 }
@@ -508,9 +510,10 @@ function visitor_dianzanNum(isFirst) {
 			var filler = {
 				num: saygoodNum
 			};
-			var dianzanDom = initDom("dianzan", filler);
+			//var dianzanDom = initDom("dianzan", filler);
+			page.trigger("refreshSayGoodNum",filler);
 			if (isFirst) {
-				setDianzan(dianzanDom);
+				setDianzan();
 				if (templateId === "root") {
 					$(".room-praise>span:eq(0)").html(saygoodNum);
 				}
@@ -520,11 +523,6 @@ function visitor_dianzanNum(isFirst) {
 				setTimeout(function () {
 					visitor_dianzanNum(false)
 				}, 1000 * data.params.click_poll_time);
-			}
-			if (templateId === "root") {
-				$(".room-praise>span:eq(0)").html(saygoodNum);
-			} else {
-				dianzanDom && dianzanDom.refreshData(saygoodNum,data.params.click_poll_time);
 			}
 		}
 	});
@@ -616,15 +614,16 @@ $("#live-video").click(function () {
 });
 //点赞
 function setDianzan(dianzanDom) {
-	$('body').on("click", "#dianzanDom", function (e) {
-		var newSayGood = parseInt($("#dianzanDom>span").html()) + 1;
+	$('body').on("click", "#dianzan-dom", function (e) {
+		var newSayGood = parseInt($("#dianzan-dom>span").html()) + 1;
 		if (templateId === "root") {
 			$(".room-praise>span:eq(0)").html(newSayGood);
 		} else {
-			if (!dianzanDom.isVisited) {
-				dianzanDom.visited();
+			if (!page.isSayGoodVisited) {
+				page.isSayGoodVisited = true;
+				page.changeSayGoodImg();
 			}
-			$("#dianzanDom>span").html(newSayGood);
+			$("#dianzan-dom>span").html(newSayGood);
 		}
 		$.get("/api/page-api/api?method=setPageClick&room_id=" + roomId, function (data) {
 			var data = JSON.parse(data);
