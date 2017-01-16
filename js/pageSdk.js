@@ -185,14 +185,6 @@ Page.prototype.refreshSayGoodNum = function(option){
 Page.prototype.changeSayGoodImg = function(){
 	document.getElementById("sayGoodImg").src = "./images/dianzan_hover.png";
 }
-//聊天信息包裹元素渲染
-Page.prototype.newMessage = function(option){
-	var wrapperId = option.wrapper,
-		wrapper = document.getElementById(wrapperId),
-		bgColor = option.bgColor,
-		fontSize = option.fontSize,
-		color = option.color;
-};
 
 Page.prototype.addSubscribeEvent = function(key,fn){
 	if(!this.clientList[key]){

@@ -22,5 +22,3 @@ var countDown = page.initcountDown({wrapper:'time-watch-wrapper',width:'3.7rem',
 var watcher = page.initwatcher({wrapper:'time-watch-wrapper',width:'1rem',height:'1rem',top:'.2rem',left:'4rem',imgSrc:'./images/watcher.png',color:'red',fontSize:'.2rem',imgWidth:'.3rem',imgHeight:'.2rem'});
 //点赞初始化
 var sayGood = page.initsayGood({wrapper:'input-content',width:'1rem',paddingTop:'1rem',top:'2rem',right:'0rem',imgSrc:'./images/dianzan.png',type:'heart',visitedImgSrc:'./images/dianzan_hover.png',color:'red',fontSize:'.2rem',imgWidth:'.5rem',imgHeight:'.5rem'});
-//渲染聊天信息包裹元素
-//var newMessage = page.messageWrapper({wrapper:'',bgColor:'',fontSize:'',color:''});
