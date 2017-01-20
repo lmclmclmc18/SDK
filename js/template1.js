@@ -1,42 +1,23 @@
 
-  //聊天按钮点击显示以及消失效果
-/*   $("#chat-img").click(function(){
-		$("#message-content").toggle().parent().next().toggle().next().toggle();
-		$("#rong-emoji").hide();
-	}); */
-	function initDom(type,filler){
-		if(type==="countTime"){
-			countDom = new CountDown("time-watch-wrapper",filler.time,templateId);
-			!countDom.isExist && countDom.init(filler.isCountDown);
-			return countDom;
-		}
-		if(type === "dianzan"){
-			var dianzanDom = new DianzanNum("input-content",filler.num,templateId);
-			!dianzanDom.isExist && dianzanDom.init();
-			return dianzanDom;
-		}else if(type === "watch"){
-			var watchDom = new WatcherNum("time-watch-wrapper",filler.num,templateId);
-			!watchDom.isExist && watchDom.init();
-			return watchDom;
-		}else if(type === "newUser"){
-			var newChatPeople = new NewChatPeople("chat-content",filler.userName,filler.userPic)
-			newChatPeople.init();
-			return newChatPeople;
-		}
-	}
-	$(".wap-input:eq(0)").click(function(){
+   //聊天按钮点击显示以及消失效果
+
+	$("#wap-input").click(function(){
 		$(this).hide();
-		$("#dianzanDom").hide();
-		$("#input-box").show();
-		document.getElementById("message-content").focus();
+		$("#dianzan-dom").hide();
+		$("#rong-emoji").show();
+		$("#txt-input").show();
+		$("#send-button").show();
+		document.getElementById("txt-input").focus();
 	});
-	$(".chat-content").click(function(){
-		document.getElementById("message-content").blur();
-		$("#input-box").hide();
-		$("#dianzanDom").show();
-		$(".wap-input:eq(0)").show();
+	$("#message-wrapper").click(function(){
+		document.getElementById("txt-input").blur();
+		$("#rong-emoji").hide();
+		$("#txt-input").hide();
+		$("#send-button").hide();
+		$("#dianzan-dom").show();
+		$("#wap-input").show();
 	})
-	$("#message-content").focus(function(){
+	$("#txt-input").focus(function(){
 		var interval = setTimeout(function() {
 			document.body.scrollTop = document.body.scrollHeight
 		}, 500);

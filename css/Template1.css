@@ -10,210 +10,74 @@ img{
 	width:.5rem;
 	height:.5rem;
 }
-video{
-	position: absolute;
-    display: block;
-    width: 100%;
-    height: 3rem;
-	background-color:#000;
-}
-#content{
-	font-size:.2rem;
-
-}
-#header{
+ 
+#player-content{
 	position:relative;
-	height: 1.2rem;
+	height:33%;
+	width:100%
 }
-#header>div>span{
-	text-align: center;
-    line-height: .35rem;
-	display:inline-block;
-    width: 1.5rem;
-    font-size: .16rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    font-weight: normal;
-}
-#header .room-user{
-	padding: 0 .25rem 0 .8rem;
-    position: relative;
-	top:.2rem;
-    height: .7rem;
-    background: rgba(0,0,0,0.3);
-    border-radius: 50px;
-	width:1.6rem;
-	text-align:center;
-	display:inline-block;
-}
-#header .room-praise{
-	float: right;
-    overflow: hidden;
-	text-align:center;
-	margin-top:.2rem;
-	width:.8rem;
-
-}
-#user-head{
-	position: absolute;
-    left: .1rem;
-    top: .1rem;
-    bottom: .1rem;
-    margin: auto;
-    display: block;
-    width: .6rem;
-    height: .6rem;
-    background: #fff;
-    border-radius: 50%;
-}
-#content{
-	position: relative;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-#content .player-content{
-	position: relative;
-    width: 100%;
-	height:40%;
-    border-radius: 3px;
-    margin: auto;
-}
-#content .input-content{
+#chat-wrapper{
 	height:60%;
+	width:100%;
+}
+#time-wrapper{
 	position:relative;
-	background-image:url(../images/bac.png);
-	background-position: top left;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+	background-color:#ef6e79;
+	height:7%;
+	width:100%;
 }
-.chat-content{
-	position:absolute;
-	top:.4rem;
-	left:0;
-	right:0;
-	bottom:.9rem;
-	padding:0 7%;
-	overflow: hidden;
-    overflow-y: auto;
+#message-wrapper{
+	overflow-scrolling:touch;
+	-webkit-overflow-scrolling: touch;
 }
-.wap-input{
-	box-sizing: border-box;
-    position: absolute;
-    bottom: .25rem;
-	left:.1rem;
-    padding: 0.1rem;
-	text-align:left;
-	background-color:white;
-    margin: 0;
-	border:0;
+#txt-input,#rong-emoji,#send-button{
+	display:none;
+}
+#wap-input{
+	box-sizing:border-box;
 	border-radius:5px;
 	border:1px solid gray;
-    width: 4.2rem;
-	font-size:.23rem;
-    outline: 0;
+	outline:0;
+	backgorund-color:white;
+	text-align:left;
 }
-#emoji-img{
+
+
+#dianzan-dom>.heart-img{
 	position:absolute;
-	left: .05rem;
-    bottom: .2rem;
-}
-#send-img{
-	position: absolute;
-    right: .05rem;
-    bottom: .3rem;
-    width: .55rem;
-    height: .4rem;
-}
-#rong-emoji{
-	display:none;
-	box-sizing: border-box;
-    position: absolute;
-    z-index: 999;
-    bottom: .8rem;
-    left: 0;
-    right: 0;
-    height: 4rem;
-    background: white;
-    overflow: hidden;
-    overflow-y: auto;
-}
-#time-watch-wrapper{
-	position:absolute;
-	bottom:0;
-	height:.6rem;
-	width:100%;
-	background-image:url(../images/wrapper_bac.png);
-	background-position: top left;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-#watchDom{
-	position:absolute;
-	left:4rem;
-	top:.2rem;
-}
-#watchDom>span{
-	color:red;
-	font-size:.2rem;
-	margin-left:.081rem;
-	vertical-align:top;
-}
-#watchDom>img{
-	width:.4rem;
+	width:.3rem;
 	height:.25rem;
 }
-#dianzanDom{
-	width:.8rem;
-	height:1rem;
-	padding-top:1rem;
-	position:absolute;
-	bottom:0;
-	right:0;
+
+#send-img{
+	position: absolute;
+	right: .15rem;
+	bottom: .1rem;
+	width: 1.1rem;
+	height: .35rem;
 	text-align:center;
-	cursor:pointer;
+	background-image:url(/h5/public/images/button.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	border:1px solid #9b9b9a;
+	border-radius:.5rem;
 }
-#dianzanDom>span{
-	color:red;
-	font-size:.2rem;
-	display:block;
+
+.message-wrapper {
+    margin-top: 15px;
 }
-#dianzanDom>img{
-	width:.45rem;
-	height:.45rem;
-	margin-top:.05rem;
-}
-#countDom{
-	position:absolute;
-	left:.15rem;
-	top:.1rem;
-}
-#countDom>span:nth-child(1){
-	color:black;
-	font-size:.2rem;
-}
-#countDom>span:nth-child(2){
-	color:red;
-	font-size:.3rem;
-	margin-left:.05rem;
-}
-.message-wrapper>span{
-	background:rgba(153,153,153,0.8);
-	display:inline-block;
+.message-wrapper>span {
+    background: rgba(153,153,153,0.8);
+    display: inline-block;
     color: white;
     border-radius: 50px;
-	padding:10px;
-	padding-right:20px;
-	word-break:break-all;
+    padding: 10px;
+    padding-right: 20px;
+    word-break: break-all;
 }
-.message-wrapper>span>img{
-	border-radius:50px;
-	vertical-align:middle;
-	width:.3rem;
-	height:.3rem;
-}
-.message-wrapper{
-	margin-top:15px;
+.message-wrapper>span>img {
+    border-radius: 50px;
+    vertical-align: middle;
+    width: .3rem;
+    height: .3rem;
 }

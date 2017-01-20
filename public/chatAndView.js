@@ -1,7 +1,7 @@
 ﻿//获取房间id
 var templateId = $("body").attr("id"),
 	templateClass = $("body").attr("class");
-var roomId = page.roomId;
+var roomId = page.roomId+'';
 var isAdEnd = false;
 
 var nameSpaceData = {
@@ -47,7 +47,7 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 			}
 			if(data.plan_start_time === 0){
 				console.log(3);
-				$("#time-watch-wrapper").prepend("<span style='font-size:.2rem;position:absolute;top:.15rem;left:.15rem;'>直播即将开始</span>");;
+				$("#time-wrapper").prepend("<span style='font-size:.2rem;position:absolute;top:.15rem;left:.15rem;'>直播即将开始</span>");;
 			}else{
 				console.log(4);
 				//$("#time-watch-wrapper").removeClass("line-height_3");
@@ -64,15 +64,15 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 		$(".room-user>img").attr("src", roomPic);
 		autoplay();
 		if (adUrl) {
-			$("#live-video").attr("src", adUrl);
+			$(page.videoDom).attr("src", adUrl);
 			//video播放完成事件
 			document.getElementById("live-video").addEventListener("ended", function () {
 				adVideoEnded(data)
 			})
 		} else {
 			isAdEnd = true;
-			data.room_status && data.live_url && $("#live-video").attr("src", data.live_url);
-			!data.room_status && data.demand_url && $("#live-video").attr("src", data.demand_url[0]);
+			data.room_status && data.live_url && $(page.videoDom).attr("src", data.live_url);
+			!data.room_status && data.demand_url && $(page.videoDom).attr("src", data.demand_url[0]);
 		}
 		//若为多机位模板初始化多机位
 		if(pageType === "multi-camera"){
@@ -85,7 +85,6 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 		visitor(data.click_poll_time, data.pv_poll_time);
 		//循环查询直播状态
 		checkStatus(data.status_poll_time, countDownDom);
-		console.log(roomPic);
 		weixinShare(shareUrl, roomPic, roomName);
 		if (!getCookie("openid") || !getCookie("userName")) {
 			setCookie();
@@ -191,9 +190,7 @@ function initRongYun(appkey, token, userName, userPic) {
 			switch (message.messageType) {
 			case RongIMClient.MessageType.TextMessage:
 				// 发送的消息内容将会被打印
-				console.log('dddddd');
-				console.log(message.content.content);
-				//chatBoxShowMessage(message);
+				chatBoxShowMessage(message);
 				break;
 			case RongIMClient.MessageType.VoiceMessage:
 				// 对声音进行预加载
@@ -252,7 +249,7 @@ function initRongYun(appkey, token, userName, userPic) {
 					userName: message.name,
 					userPic: message.userpic
 				}
-				initDom("newUser", filler);
+//				initDom("newUser", filler);
 				break;
 			default:
 				console.log('sdfsfdsfd');
@@ -317,7 +314,7 @@ function customMessage(userName, userPic) {
 			}
 			initDom("newUser", filler); */
 			console.log('自定义消息发送成功');
-			templateClass === "interaction" && ($("#wrapper").scrollTop($("#wrapper")[0].scrollHeight));
+			templateClass === "interaction" && ($("#message-wrapper").scrollTop($("#message-wrapper")[0].scrollHeight));
 			templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth))
 		},
 		onError: function (errorCode) {
@@ -383,8 +380,7 @@ function sendMessage(msg) {
 		// 发送消息成功
 		onSuccess: function (message) {
 			//message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
-			console.log(message);
-			//chatBoxShowMessage(message);
+			chatBoxShowMessage(message);
 		},
 		onError: function (errorCode, message) {
 			var info = '';
@@ -415,15 +411,15 @@ function sendMessage(msg) {
 		}
 	});
 }
-/* function chatBoxShowMessage(message) {
+function chatBoxShowMessage(message) {
 	var name = message.content.extra,
 	content = RongIMLib.RongIMEmoji.emojiToHTML(message.content.content[0]),
-	userpic = is_weixin() ? message.content.content[1] : "/public/images/default.png";
-	$("#rong-emoji").hide();
+	userpic = is_weixin() ? message.content.content[1] : "./images/default.png";
+	$("#emoji-wrapper").hide();
 	$(".chat-content").append("<p class='message-wrapper'><span><img src=" + userpic + ">&nbsp;&nbsp;<span class='user-name'>" + name + "</span>&nbsp;:&nbsp;" + content + "</span></p>");
-	templateClass === "interaction" && ($("#wrapper").scrollTop($("#wrapper")[0].scrollHeight));
-	templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth));
-} */
+	$("#message-wrapper").scrollTop($("#message-wrapper")[0].scrollHeight);
+	//templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth));
+} 
 //获取链接中参数的方法
 function GetQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -438,8 +434,8 @@ function play(countDownDom) {
 		var data = JSON.parse(data);
 		if (data.code === 10000) {
 			data = data.params.room_view_data;
-			data.room_status && data.play_url && $("#live-video").attr("src", data.live_url);
-			!data.room_status && data.demand_url && $("#live-video").attr("src", data.demand_url[0]);
+			data.room_status && data.play_url && $(page.videoDom).attr("src", data.live_url);
+			!data.room_status && data.demand_url && $(page.videoDom).attr("src", data.demand_url[0]);
 			if (data.room_status === 1) {
 				countDownDom && (countDownDom.isCountDown = false);
 				countDownDom && (countDownDom.time = (new Date().getTime()) - data.live_start_time * 1000);
@@ -453,8 +449,8 @@ function play(countDownDom) {
 //广告播放完后执行
 function adVideoEnded(data) {
 	isAdEnd = true;
-	data.room_status && data.live_url && $("#live-video").attr("src", data.live_url);
-	!data.room_status && data.demand_url && $("#live-video").attr("src", data.demand_url[0]);
+	data.room_status && data.live_url && $(page.videoDom).attr("src", data.live_url);
+	!data.room_status && data.demand_url && $(page.videoDom).attr("src", data.demand_url[0]);
 }
 
 //初始化查询访问人数跟点赞
@@ -577,8 +573,8 @@ function autoplay() {
 	}
 }
 //点击发送信息按钮
-$("#send-img").click(function () {
-	var inputValue = $("#message-content"),
+$("#send-button").click(function () {
+	var inputValue = $("#txt-input"),
 	userpic = GetQueryString("userpic") || "/public/images/default.png",
 	message = inputValue.val();
 	if (message === '') {
@@ -600,12 +596,12 @@ $(document).on("click", "#rong-emoji>span", function (e) {
 	e.preventDefault();
 	var name = $(this).children("span").attr("name");
 	var str = RongIMLib.RongIMEmoji.symbolToEmoji(name);
-	var input = $("#message-content");
+	var input = $("#txt-input");
 	var value = input.val();
 	input.val(value + str);
 });
 //点击video暂停
-$("#live-video").click(function () {
+$(page.videoDom).click(function () {
 	if ($(this)[0].paused) {
 		$(this)[0].play();
 	} else {
