@@ -21,7 +21,7 @@ Page.prototype.initVideo = function(option){
 		wrapperId = option.wrapper,
 		wrapper = document.getElementById(wrapperId),
 		videoSrc = option.videoSrc,
-		domList=[];
+		domList={};
 		poster = option.poster;
 	video.id = "live_video";
 	video.style.controls = "controls";
@@ -30,13 +30,10 @@ Page.prototype.initVideo = function(option){
 	//video.sytle.webkitPlaysInline = true;
 	video.style.videoSrc = videoSrc;
 	//video.sytle.poster = poster;
-	domList.push({
-		name:"videoDom",
-		dom:video
-	})
+	domList.videoDom = video;
 	this.initWhtl(option,wrapper,domList,"video");
 	//能调取sdk初始化的video对象
-	return video;
+	return domList;
 };
 //video播放监听
 Page.prototype.playStatusListener = function(option){
@@ -51,17 +48,14 @@ Page.prototype.initcountDown = function(option){
 		wrapperId = option.wrapper,
 		wrapper = document.getElementById(wrapperId),
 		color = option.color,
-		domList = [],
+		domList = {},
 		timeColor = option.timeColor,
 		titleFontSize = option.titleFontSize,
 		fontSize = option.fontSize;
 	countDown.id = "countDom";
 	span.id = "countDom-span";
 	span1.id = "countDom-span1";
-	domList.push({
-		name:"countDownDom",
-		dom:countDown
-	})
+	domList.countDownDom = countDown;
 	this.initWhtl(option,wrapper,domList,"countDown");
 	countDown.appendChild(span);
 	countDown.appendChild(span1);
@@ -73,7 +67,7 @@ Page.prototype.initcountDown = function(option){
 	span1.style.fontSize = fontSize;
 	//将函数存入缓存 接口获取数据后再执行
 	this.addSubscribeEvent("drawCountDown",this.countTime);
-	return countDown;
+	return domList;
 };
 //后台获取数据后渲染倒计时dom
 Page.prototype.countTime = function (option) {
@@ -130,7 +124,7 @@ Page.prototype.initwatcher = function(option){
 		fontSize = option.fontSize,
 		imgWidth = option.imgWidth,
 		imgHeight = option.imgHeight,
-		domList = [],
+		domList = {},
 		watcherDom = document.createElement("div");
 	img.src = option.imgSrc;
 	img.style.width = imgWidth;
@@ -140,15 +134,12 @@ Page.prototype.initwatcher = function(option){
 	span.id = "watcher-num";
 	span.style.fontSize = fontSize;
 	span.style.color = color;
-	domList.push({
-		name:"watcherDom",
-		dom:watcherDom
-	});
+	domList.watcherDom = watcherDom;
 	this.initWhtl(option,wrapper,domList,"watcher");
 	watcherDom.appendChild(img);
 	watcherDom.appendChild(span);
 	this.addSubscribeEvent("drawWatcher",this.refreshWatcherNum);
-	return watcherDom;
+	return domList;
 };
 //渲染观看人次dom
 Page.prototype.refreshWatcherNum = function(option){
@@ -164,7 +155,7 @@ Page.prototype.initsayGood = function(option){
 		color = option.color,
 		fontSize = option.fontSize,
 		type = option.type,
-		domList = [],
+		domList = {},
 		imgHeart1 = document.createElement("img"),
 		imgHeart2 = document.createElement("img"),
 		imgHeart3 = document.createElement("img"),
@@ -172,13 +163,10 @@ Page.prototype.initsayGood = function(option){
 		span = document.createElement("span");
 	//wrapper.style.textAlign = "center";
 	span.style.width = "100%";
-	span.style.marginLeft = ".2rem";
+	//span.style.marginLeft = ".2rem";
 	DianzanDom.id = "dianzan-dom";
 	span.id = "saygood-num";
-	domList.push({
-		name:"dianzanDom",
-		dom:DianzanDom
-	});
+	domList.dianzanDom = DianzanDom;
 	img.src = option.imgSrc;
 	img.id = "sayGoodImg";
 	imgHeart1.src = "./images/" + type + "-1.png";
@@ -200,7 +188,8 @@ Page.prototype.initsayGood = function(option){
 	DianzanDom.appendChild(img);
 	this.initWhtl(option,wrapper,domList,"sayGood");
 	this.addSubscribeEvent("refreshSayGoodNum",this.refreshSayGoodNum);
-	return DianzanDom;
+	DianzanDom.style.textAlign = "center";
+	return domList;
 };
 //渲染点赞人次dom
 Page.prototype.refreshSayGoodNum = function(option){
@@ -214,7 +203,7 @@ Page.prototype.changeSayGoodImg = function(){
 Page.prototype.initChatContent = function(option){
 	var wrapper = document.getElementById(option.wrapper),
 		//wrapper.id = option.domId,
-		domList = [],
+		domList = {},
 		txtInput = document.createElement("input"),
 		sendButton = document.createElement("input"),
 		rongEmoji = document.createElement("img"),
@@ -234,28 +223,16 @@ Page.prototype.initChatContent = function(option){
 	messageWrapper.style.overflow = "hidden";
 	messageWrapper.style.overflowY = "auto";
 	chatUl.style.padding = 0;
-	domList.push({
-		name:"txtInput",
-		dom:txtInput
-	},{
-		name:"sendButton",
-		dom:sendButton
-	},{
-		name:"rongEmoji",
-		dom:rongEmoji
-	},{
-		name:"emojiWrapper",
-		dom:emojiWrapper
-	},{
-		name:"liveTitle",
-		dom:liveTitle
-	},{
-		name:"messageWrapper",
-		dom:messageWrapper
-	},{
-		name:"wapInput",
-		dom:wapInput
-	});
+	domList = {
+		txtInput:txtInput,
+		sendButton:sendButton,
+		rongEmoji:rongEmoji,
+		emojiWrapper:emojiWrapper,
+		liveTitle:liveTitle,
+		messageWrapper:messageWrapper,
+		wapInput:wapInput,
+		chatUl:chatUl
+	};
 	this.initWhtl(option,wrapper,domList,"chatContent");
 	
 	wrapper.style.fontSize = option.fontSize;
@@ -267,6 +244,8 @@ Page.prototype.initChatContent = function(option){
 	sendButton.type = "button";
 	sendButton.value = "发送";
 	sendButton.style.textAlign = "center";
+	emojiWrapper.style.display = "none";
+	return domList;
 }
 Page.prototype.addSubscribeEvent = function(key,fn){
 	if(!this.clientList[key]){
@@ -293,10 +272,13 @@ Page.prototype.initWhtl = function(option,wrapper,domList,componentName){
 	wrapper ? (wrapper.children.length===0 ? wrapper.appendChild(wrapperDiv) : wrapperDiv = wrapper.children[0]) : this.error("There is no "+componentName);
 
 	if(domList){
-		for(var i=0,len=domList.length;i<len;i++){
-			var dom = domList[i].dom,
-				domOption = option[domList[i].name],
-				width = domOption.width,
+		for(name in domList){
+			var dom = domList[name],
+				domOption = option[name];
+			if(!dom || !domOption){
+				continue;
+			}
+			var width = domOption.width,
 				height = domOption.height,
 				top = domOption.top,
 				right = domOption.right,
@@ -306,8 +288,10 @@ Page.prototype.initWhtl = function(option,wrapper,domList,componentName){
 				fontWeight = domOption.fontWeight,
 				fontSize = domOption.fontSize,
 				padding = domOption.padding,
+				backgroundColor = domOption.backgroundColor,
 				paddingTop = domOption.paddingTop;
 			dom.style.position = "absolute";
+			backgroundColor &&(dom.style.backgroundColor = backgroundColor);
 			width && (dom.style.width = width);
 			height && (dom.style.height = height);
 			top && (dom.style.top = top);

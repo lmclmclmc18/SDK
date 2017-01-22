@@ -31,7 +31,7 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 			}
 			if(data.live_start_time === 0){
 				console.log(1);
-				$("#time-watch-wrapper").prepend("<span style='font-size:.2rem;position:absolute;top:.15rem;left:.15rem;'>直播即将开始</span>");			
+				$("#time-wrapper").prepend("<span style='font-size:.2rem;position:absolute;top:.15rem;left:.15rem;'>直播即将开始</span>");			
 			}else{
 				//$("#time-watch-wrapper").removeClass("line-height_3");
 				//countDownDom = initDom("countTime", filler);
@@ -59,20 +59,18 @@ $.get("/api/page-api/api?method=getPageLiveRoomView&room_id=" + roomId, function
 		nameSpaceData.oldVisit = data.old_visit;
 		nameSpaceData.oldSayGood = data.old_saygood;
 		$("title").html(roomName);
-		$("#live-title").html(roomName);
-		$(".room-user>span:eq(0)").html(roomName);
-		$(".room-user>img").attr("src", roomPic);
+		$(pageChatContent.liveTitle).html(roomName);
 		autoplay();
 		if (adUrl) {
-			$(page.videoDom).attr("src", adUrl);
+			$(pageVideo.videoDom).attr("src", adUrl);
 			//video播放完成事件
 			document.getElementById("live-video").addEventListener("ended", function () {
 				adVideoEnded(data)
 			})
 		} else {
 			isAdEnd = true;
-			data.room_status && data.live_url && $(page.videoDom).attr("src", data.live_url);
-			!data.room_status && data.demand_url && $(page.videoDom).attr("src", data.demand_url[0]);
+			data.room_status && data.live_url && $(pageVideo.videoDom).attr("src", data.live_url);
+			!data.room_status && data.demand_url && $(pageVideo.videoDom).attr("src", data.demand_url[0]);
 		}
 		//若为多机位模板初始化多机位
 		if(pageType === "multi-camera"){
@@ -314,8 +312,8 @@ function customMessage(userName, userPic) {
 			}
 			initDom("newUser", filler); */
 			console.log('自定义消息发送成功');
-			templateClass === "interaction" && ($("#message-wrapper").scrollTop($("#message-wrapper")[0].scrollHeight));
-			templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth))
+			$(pageChatContent.messageWrapper).scrollTop(pageChatContent.messageWrapper.scrollHeight);
+			//templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth))
 		},
 		onError: function (errorCode) {
 			alert(errorCode);
@@ -325,11 +323,11 @@ function customMessage(userName, userPic) {
 
 //初始化聊天室
 function initChatRoom(emoji) {
-	var emojiBox = $("#rong-emoji");
+	var emojiBox = $(pageChatContent.emojiWrapper);
 	for (var i = 0, len = emoji.length; i < len; i++) {
 		emojiBox.append(emoji[i]);
 	}
-	$("#rong-emoji>span").css({
+	$(pageChatContent.emojiWrapper).children("span").css({
 		"display": "inline-block",
 		"width": ".7rem",
 		"height": ".7rem",
@@ -415,9 +413,9 @@ function chatBoxShowMessage(message) {
 	var name = message.content.extra,
 	content = RongIMLib.RongIMEmoji.emojiToHTML(message.content.content[0]),
 	userpic = is_weixin() ? message.content.content[1] : "./images/default.png";
-	$("#emoji-wrapper").hide();
-	$(".chat-content").append("<p class='message-wrapper'><span><img src=" + userpic + ">&nbsp;&nbsp;<span class='user-name'>" + name + "</span>&nbsp;:&nbsp;" + content + "</span></p>");
-	$("#message-wrapper").scrollTop($("#message-wrapper")[0].scrollHeight);
+	$(pageChatContent.emojiWrapper).hide();
+	$(pageChatContent.chatUl).append("<p class='message-wrapper'><span><img src=" + userpic + ">&nbsp;&nbsp;<span class='user-name'>" + name + "</span>&nbsp;:&nbsp;" + content + "</span></p>");
+	$(pageChatContent.messageWrapper).scrollTop(pageChatContent.messageWrapper.scrollHeight);
 	//templateClass === "basis" && ($("#chat-content").scrollLeft($("#chat-content")[0].scrollWidth));
 } 
 //获取链接中参数的方法
@@ -434,8 +432,8 @@ function play(countDownDom) {
 		var data = JSON.parse(data);
 		if (data.code === 10000) {
 			data = data.params.room_view_data;
-			data.room_status && data.play_url && $(page.videoDom).attr("src", data.live_url);
-			!data.room_status && data.demand_url && $(page.videoDom).attr("src", data.demand_url[0]);
+			data.room_status && data.play_url && $(pageVideo.videoDom).attr("src", data.live_url);
+			!data.room_status && data.demand_url && $(pageVideo.videoDom).attr("src", data.demand_url[0]);
 			if (data.room_status === 1) {
 				countDownDom && (countDownDom.isCountDown = false);
 				countDownDom && (countDownDom.time = (new Date().getTime()) - data.live_start_time * 1000);
@@ -449,8 +447,8 @@ function play(countDownDom) {
 //广告播放完后执行
 function adVideoEnded(data) {
 	isAdEnd = true;
-	data.room_status && data.live_url && $(page.videoDom).attr("src", data.live_url);
-	!data.room_status && data.demand_url && $(page.videoDom).attr("src", data.demand_url[0]);
+	data.room_status && data.live_url && $(pageVideo.videoDom).attr("src", data.live_url);
+	!data.room_status && data.demand_url && $(pageVideo.videoDom).attr("src", data.demand_url[0]);
 }
 
 //初始化查询访问人数跟点赞
@@ -482,9 +480,6 @@ function visitor_watchNum(isFirst) {
 			//var watchDom = initDom("watch", filler);
 			page.trigger("drawWatcher",filler);
 			if (isFirst) {
-				if (templateId === "root") {
-					$(".room-user>span:eq(1)").html(visitNum);
-				}
 				return;
 			}
 			if (data.params.pv_poll_time !== 0) {
@@ -510,9 +505,6 @@ function visitor_dianzanNum(isFirst) {
 			page.trigger("refreshSayGoodNum",filler);
 			if (isFirst) {
 				setDianzan();
-				if (templateId === "root") {
-					$(".room-praise>span:eq(0)").html(saygoodNum);
-				}
 				return;
 			}
 			if (data.params.click_poll_time !== 0) {
@@ -573,8 +565,8 @@ function autoplay() {
 	}
 }
 //点击发送信息按钮
-$("#send-button").click(function () {
-	var inputValue = $("#txt-input"),
+$(pageChatContent.sendButton).click(function () {
+	var inputValue = $(pageChatContent.txtInput),
 	userpic = GetQueryString("userpic") || "/public/images/default.png",
 	message = inputValue.val();
 	if (message === '') {
@@ -588,20 +580,20 @@ $("#send-button").click(function () {
 	$("#input-box").hide();
 });
 //点击发送表情按钮
-$("#emoji-img").click(function () {
-	$("#rong-emoji").toggle();
+$(pageChatContent.rongEmoji).click(function () {
+	$(pageChatContent.emojiWrapper).toggle();
 });
 //选择表情符号
-$(document).on("click", "#rong-emoji>span", function (e) {
+$(document).on("click", "#emoji-wrapper>span", function (e) {
 	e.preventDefault();
 	var name = $(this).children("span").attr("name");
 	var str = RongIMLib.RongIMEmoji.symbolToEmoji(name);
-	var input = $("#txt-input");
+	var input = $(pageChatContent.txtInput);
 	var value = input.val();
 	input.val(value + str);
 });
 //点击video暂停
-$(page.videoDom).click(function () {
+$(pageVideo.videoDom).click(function () {
 	if ($(this)[0].paused) {
 		$(this)[0].play();
 	} else {
@@ -611,16 +603,12 @@ $(page.videoDom).click(function () {
 //点赞
 function setDianzan(dianzanDom) {
 	$('body').on("click", "#dianzan-dom", function (e) {
-		var newSayGood = parseInt($("#dianzan-dom>span").html()) + 1;
-		if (templateId === "root") {
-			$(".room-praise>span:eq(0)").html(newSayGood);
-		} else {
-			if (!page.isSayGoodVisited) {
-				page.isSayGoodVisited = true;
-				page.changeSayGoodImg();
-			}
-			$("#dianzan-dom>span").html(newSayGood);
+		var newSayGood = parseInt($(pageSayGood.dianzanDom).children("span").html()) + 1;
+		if (!page.isSayGoodVisited) {
+			page.isSayGoodVisited = true;
+			page.changeSayGoodImg();
 		}
+		$(pageSayGood.dianzanDom).children("span").html(newSayGood);
 		$.get("/api/page-api/api?method=setPageClick&room_id=" + roomId, function (data) {
 			var data = JSON.parse(data);
 			if (data.code === 10000) {

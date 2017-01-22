@@ -1,6 +1,6 @@
 var page = new Page({roomId:1026,bacImg:'./images/bac.png'});
 //视频初始化
-var video = page.initVideo({
+var pageVideo = page.initVideo({
 	wrapper:'player-content',
 	poster:'',
 	videoDom:{
@@ -27,7 +27,7 @@ page.playStatusListener({
 	}
 });
 //倒计时初始化
-var countDown = page.initcountDown({
+var pageCountDown = page.initcountDown({
 	wrapper:'time-wrapper',
 	countDownDom:{
 		width:'3.7rem',
@@ -42,12 +42,12 @@ var countDown = page.initcountDown({
 	fontSize:'.25rem'
 });
 //观看人次初始化
-var watcher = page.initwatcher({
+var pageWatcher = page.initwatcher({
 	wrapper:'time-wrapper',
 	watcherDom:{
 		width:'1rem',
 		height:'1rem',
-		top:'.15rem',
+		top:'.1rem',
 		left:'4rem'
 	},
 	imgSrc:'./images/watcher.png',
@@ -57,7 +57,7 @@ var watcher = page.initwatcher({
 	imgHeight:'.3rem'
 });
 //点赞初始化
-var sayGood = page.initsayGood({
+var pageSayGood = page.initsayGood({
 	wrapper:'chat-wrapper',
 	dianzanDom:{
 		width:'.65rem',
@@ -74,7 +74,7 @@ var sayGood = page.initsayGood({
 	imgHeight:'.25rem'
 });
 //聊天初始化
-var chatContent = page.initChatContent({
+var pageChatContent = page.initChatContent({
 	wrapper:'chat-wrapper',
 	txtInput:{
 		width:'3rem',
@@ -98,7 +98,8 @@ var chatContent = page.initChatContent({
 		width:'90%',
 		height:'70%',
 		bottom:'.8rem',
-		left:'5%'
+		left:'5%',
+		backgroundColor:'white'
 	},
 	messageWrapper:{
 		top:'.4rem',
